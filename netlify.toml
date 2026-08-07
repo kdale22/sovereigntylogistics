@@ -1,0 +1,13 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "https://sovereigntylogistics.com/*"
+  to = "https://www.sovereigntylogistics.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
