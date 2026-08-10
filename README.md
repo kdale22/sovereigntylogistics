@@ -1,2 +1,0 @@
-# sovereigntylogistics
-HTML Website

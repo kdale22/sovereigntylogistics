@@ -1,0 +1,33 @@
+Hi,
+
+Please use the attached package: Sovereignty_Logistics_FINAL_APPROVED_HTML_v1.0.zip.
+
+This package supersedes every previous Sovereignty Logistics website ZIP I supplied.
+
+The seven main HTML pages are now locked to the final approved static designs and must be used as the visual source of truth:
+- index.html
+- about.html
+- services.html
+- process.html
+- standards.html
+- who-we-serve.html
+- contact.html
+
+Please redeploy this exact package to the existing Netlify staging site and send me the staging URL for approval.
+
+Do not redesign, replace, reinterpret, convert to WordPress, or merge in the previous HTML package.
+
+Final production details:
+www.sovereigntylogistics.com
+operations@sovereigntylogistics.com
++61 402 094 510
+Canberra, Australia
+
+The contact page contains a Netlify-compatible Service Assessment Form. Please confirm Netlify detects the form and configure form notifications to operations@sovereigntylogistics.com.
+
+Do not connect the live GoDaddy domain until I approve staging.
+
+Please read README_FOR_FREELANCER.md inside the ZIP before redeployment.
+
+Thank you,
+Kyle Dale

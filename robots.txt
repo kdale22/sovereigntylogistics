@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /authorised-access.html
-
 Sitemap: https://www.sovereigntylogistics.com/sitemap.xml
