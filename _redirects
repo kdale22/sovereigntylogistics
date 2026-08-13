@@ -1,6 +1,10 @@
+# Canonical secure portal URL
+/secure/index  /secure/  301!
+
+# Protect the complete secure area
 /secure/*  /secure/:splat  200!  Role=admin,authorized
 /secure/*  /login/         401!
 
+# Existing redirects
 /portal-demo.html  /authorised-access.html  301
-
 https://sovereigntylogistics.com/*  https://www.sovereigntylogistics.com/:splat  301!
