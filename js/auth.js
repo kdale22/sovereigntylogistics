@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // Check Netlify Identity
     if (!window.netlifyIdentity) {
         console.error("Netlify Identity is not loaded.");
         return;
     }
 
+    // Initialize user session
     window.netlifyIdentity.on("init", function (user) {
 
         // User is not logged in
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Display logged-in email
+        // Display logged-in user's email
         const emailElement = document.getElementById("user-email");
 
         if (emailElement) {
@@ -22,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-    // Logout
+    // Logout button
     const logoutButton = document.getElementById("logout");
 
     if (logoutButton) {
@@ -40,74 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.location.href = "/login/";
 
-    });
-
-     if (!window.netlifyIdentity) {
-        console.error("Netlify Identity is not loaded.");
-        return;
-    }
-
-    window.netlifyIdentity.on("init", function (user) {
-
-        if (!user) {
-            window.location.href = "/login/";
-            return;
-        }
-
-        const emailElement = document.getElementById("user-email");
-
-        if (emailElement) {
-            emailElement.textContent = user.email;
-        }
-
-    });
-
-    const logoutButton = document.getElementById("logout");
-
-    if (logoutButton) {
-        logoutButton.addEventListener("click", function () {
-            window.netlifyIdentity.logout();
-        });
-    }
-
-    window.netlifyIdentity.on("logout", function () {
-        window.location.href = "/login/";
-    });
-
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    if (!window.netlifyIdentity) {
-        console.error("Netlify Identity is not loaded.");
-        return;
-    }
-
-    window.netlifyIdentity.on("init", function (user) {
-
-        if (!user) {
-            window.location.href = "/login/";
-            return;
-        }
-
-        const emailElement = document.getElementById("user-email");
-
-        if (emailElement) {
-            emailElement.textContent = user.email;
-        }
-
-    });
-
-    const logoutButton = document.getElementById("logout");
-
-    if (logoutButton) {
-        logoutButton.addEventListener("click", function () {
-            window.netlifyIdentity.logout();
-        });
-    }
-
-    window.netlifyIdentity.on("logout", function () {
-        window.location.href = "/login/";
     });
 
 });
