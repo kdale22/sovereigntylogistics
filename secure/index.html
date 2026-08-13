@@ -1,42 +1,924 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta
+        name="description"
+        content="Secure Document Portal for authorised Sovereignty Logistics users."
+    >
+
     <title>Secure Document Portal | Sovereignty Logistics</title>
+
+    <style>
+        :root {
+            --navy: #0b1728;
+            --navy-light: #12243a;
+            --blue: #2f6fed;
+            --blue-dark: #245bc4;
+            --white: #ffffff;
+            --bg: #f4f7fb;
+            --border: #e3e9f1;
+            --text: #172033;
+            --muted: #667085;
+            --success-bg: #eaf8f0;
+            --success: #16794c;
+            --shadow: 0 10px 35px rgba(15, 31, 53, 0.08);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid rgba(47, 111, 237, 0.35);
+            outline-offset: 3px;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 16px;
+            z-index: 9999;
+            padding: 10px 16px;
+            background: var(--white);
+            color: var(--navy);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .skip-link:focus {
+            top: 16px;
+        }
+
+        /* Header */
+
+        .portal-header {
+            background: var(--navy);
+            color: var(--white);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .header-inner {
+            width: min(1180px, calc(100% - 40px));
+            min-height: 76px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 42px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .brand-name {
+            font-size: 16px;
+            font-weight: 750;
+            letter-spacing: 0.01em;
+        }
+
+        .brand-label {
+            margin-top: 1px;
+            color: rgba(255, 255, 255, 0.58);
+            font-size: 12px;
+        }
+
+        .logout-button {
+            appearance: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--white);
+            padding: 10px 17px;
+            min-height: 42px;
+            border-radius: 9px;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.32);
+        }
+
+        .logout-button:active {
+            transform: translateY(1px);
+        }
+
+        /* Main */
+
+        main {
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 54px 0 70px;
+        }
+
+        .welcome {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 36px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
+
+        .intro {
+            max-width: 690px;
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 16px;
+        }
+
+        .account-status {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 14px;
+            border: 1px solid #d8eee1;
+            background: var(--success-bg);
+            color: var(--success);
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #21a366;
+        }
+
+        #user-email {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Category */
+
+        .category {
+            margin-top: 34px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 14px;
+        }
+
+        .category-title {
+            margin: 0;
+            color: var(--navy);
+            font-size: 19px;
+            line-height: 1.3;
+        }
+
+        .category-count {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Document cards */
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .document-card {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 22px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 3px 16px rgba(15, 31, 53, 0.035);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .document-card:hover {
+            transform: translateY(-2px);
+            border-color: #cfd9e6;
+            box-shadow: var(--shadow);
+        }
+
+        .document-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .file-icon {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #edf3ff;
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+        }
+
+        .file-icon.zip {
+            background: #fff4df;
+            color: #a76a00;
+        }
+
+        .document-info {
+            min-width: 0;
+        }
+
+        .document-title {
+            margin: 1px 0 5px;
+            color: var(--navy);
+            font-size: 16px;
+            line-height: 1.4;
+            font-weight: 750;
+        }
+
+        .document-description {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .document-meta {
+            margin-top: 17px;
+            color: #8a95a5;
+            font-size: 12px;
+        }
+
+        .document-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #edf0f4;
+        }
+
+        .document-action {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 8px 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 750;
+            text-decoration: none;
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .document-action.primary {
+            background: var(--blue);
+            color: var(--white);
+            border: 1px solid var(--blue);
+        }
+
+        .document-action.primary:hover {
+            background: var(--blue-dark);
+            border-color: var(--blue-dark);
+        }
+
+        .document-action.secondary {
+            background: var(--white);
+            color: var(--navy);
+            border: 1px solid var(--border);
+        }
+
+        .document-action.secondary:hover {
+            background: #f7f9fc;
+            border-color: #cbd5e1;
+        }
+
+        /* Footer */
+
+        .portal-footer {
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 0 0 35px;
+            color: #8993a2;
+            font-size: 12px;
+        }
+
+        .footer-line {
+            padding-top: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 760px) {
+
+            .header-inner,
+            main,
+            .portal-footer {
+                width: min(100% - 28px, 1180px);
+            }
+
+            .header-inner {
+                min-height: 68px;
+            }
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+                flex-basis: 38px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-label {
+                font-size: 11px;
+            }
+
+            .logout-button {
+                min-height: 38px;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            main {
+                padding: 38px 0 50px;
+            }
+
+            .welcome {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 18px;
+                margin-bottom: 28px;
+            }
+
+            .account-status {
+                white-space: normal;
+            }
+
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category {
+                margin-top: 28px;
+            }
+        }
+
+        @media (max-width: 430px) {
+
+            .header-inner {
+                gap: 12px;
+            }
+
+            .brand-label {
+                display: none;
+            }
+
+            .logout-button {
+                padding-inline: 10px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .intro {
+                font-size: 14px;
+            }
+
+            .document-card {
+                padding: 18px;
+            }
+
+            .document-actions {
+                flex-direction: column;
+            }
+
+            .document-action {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Sovereignty Logistics</h1>
-
-    <h2>Secure Document Portal</h2>
-
-    <p id="user-email"></p>
-
-    <hr>
-
-    <h3>Manuals & Procedures</h3>
-
-    <a href="/secure/documents/Sovereignty_Logistics_Australian_Initial_Outreach_Letters_v1.0.docx" target="_blank">
-        View Document
+    <a class="skip-link" href="#main-content">
+        Skip to main content
     </a>
 
-    <br><br>
+    <header class="portal-header">
+        <div class="header-inner">
 
-    <a href="/secure/documents/Sovereignty_Logistics_Australian_Initial_Outreach_Letters_v1.0.docx" download>
-        Download Document
-    </a>
+            <a class="brand" href="/secure/" aria-label="Sovereignty Logistics Secure Portal home">
+                <span class="brand-mark" aria-hidden="true">SL</span>
 
-    <br><br>
+                <span>
+                    <span class="brand-name">Sovereignty Logistics</span>
+                    <span class="brand-label">Secure Document Portal</span>
+                </span>
+            </a>
 
-    <button id="logout">Logout</button>
+            <button
+                type="button"
+                class="logout-button"
+                id="logout"
+                aria-label="Log out of the secure document portal"
+            >
+                Log out
+            </button>
 
+        </div>
+    </header>
+
+    <main id="main-content">
+
+        <section class="welcome" aria-labelledby="page-title">
+
+            <div>
+                <p class="eyebrow">Authorised Access</p>
+
+                <h1 id="page-title">
+                    Secure Document Portal
+                </h1>
+
+                <p class="intro">
+                    Access your authorised Sovereignty Logistics documents,
+                    procedures, forms and operational resources from one secure location.
+                </p>
+
+                <p id="user-email" aria-live="polite"></p>
+            </div>
+
+            <div class="account-status" aria-label="Your account is currently signed in">
+                <span class="status-dot" aria-hidden="true"></span>
+                Secure session active
+            </div>
+
+        </section>
+
+
+        <!-- Manuals & Procedures -->
+
+        <section class="category" aria-labelledby="manuals-title">
+
+            <div class="category-header">
+                <h2 class="category-title" id="manuals-title">
+                    Manuals &amp; Procedures
+                </h2>
+
+                <span class="category-count">
+                    2 documents
+                </span>
+            </div>
+
+            <div class="documents-grid">
+
+                <article class="document-card">
+
+                    <div class="document-top">
+
+                        <div class="file-icon" aria-hidden="true">
+                            DOCX
+                        </div>
+
+                        <div class="document-info">
+
+                            <h3 class="document-title">
+                                Courier Escort Field Operations Pack
+                            </h3>
+
+                            <p class="document-description">
+                                Field operations documentation and procedures.
+                            </p>
+
+                            <div class="document-meta">
+                                Microsoft Word document
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-actions">
+
+                        <a
+                            class="document-action primary"
+                            href="/secure/documents/Sovereignty_Logistics_FOP-001_Courier_Escort_Field_Operations_Pack_v1.0.docx"
+                            target="_blank"
+                            rel="noopener"
+                            aria-label="View Courier Escort Field Operations Pack"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            class="document-action secondary"
+                            href="/secure/documents/Sovereignty_Logistics_FOP-001_Courier_Escort_Field_Operations_Pack_v1.0.docx"
+                            download
+                            aria-label="Download Courier Escort Field Operations Pack"
+                        >
+                            Download
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+                <article class="document-card">
+
+                    <div class="document-top">
+
+                        <div class="file-icon" aria-hidden="true">
+                            PDF
+                        </div>
+
+                        <div class="document-info">
+
+                            <h3 class="document-title">
+                                Courier Escort Field Operations Pack
+                            </h3>
+
+                            <p class="document-description">
+                                PDF version of the field operations pack.
+                            </p>
+
+                            <div class="document-meta">
+                                PDF document
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-actions">
+
+                        <a
+                            class="document-action primary"
+                            href="/secure/documents/Sovereignty_Logistics_FOP-001_Courier_Escort_Field_Operations_Pack_v1.0.pdf"
+                            target="_blank"
+                            rel="noopener"
+                            aria-label="View Courier Escort Field Operations Pack PDF"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            class="document-action secondary"
+                            href="/secure/documents/Sovereignty_Logistics_FOP-001_Courier_Escort_Field_Operations_Pack_v1.0.pdf"
+                            download
+                            aria-label="Download Courier Escort Field Operations Pack PDF"
+                        >
+                            Download
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- Operations Documents -->
+
+        <section class="category" aria-labelledby="operations-title">
+
+            <div class="category-header">
+                <h2 class="category-title" id="operations-title">
+                    Operations Documents
+                </h2>
+
+                <span class="category-count">
+                    1 document
+                </span>
+            </div>
+
+            <div class="documents-grid">
+
+                <article class="document-card">
+
+                    <div class="document-top">
+
+                        <div class="file-icon" aria-hidden="true">
+                            PDF
+                        </div>
+
+                        <div class="document-info">
+
+                            <h3 class="document-title">
+                                Secure Backend Field Document Register
+                            </h3>
+
+                            <p class="document-description">
+                                Secure operational document register and reference material.
+                            </p>
+
+                            <div class="document-meta">
+                                PDF document
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-actions">
+
+                        <a
+                            class="document-action primary"
+                            href="/secure/documents/Sovereignty_Logistics_FOP-REG-001_Secure_Backend_Field_Document_Register_v1.0.pdf"
+                            target="_blank"
+                            rel="noopener"
+                            aria-label="View Secure Backend Field Document Register"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            class="document-action secondary"
+                            href="/secure/documents/Sovereignty_Logistics_FOP-REG-001_Secure_Backend_Field_Document_Register_v1.0.pdf"
+                            download
+                            aria-label="Download Secure Backend Field Document Register"
+                        >
+                            Download
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- Forms & Templates -->
+
+        <section class="category" aria-labelledby="forms-title">
+
+            <div class="category-header">
+                <h2 class="category-title" id="forms-title">
+                    Forms &amp; Templates
+                </h2>
+
+                <span class="category-count">
+                    Available documents
+                </span>
+            </div>
+
+            <div class="documents-grid">
+
+                <article class="document-card">
+
+                    <div class="document-top">
+
+                        <div class="file-icon" aria-hidden="true">
+                            DOC
+                        </div>
+
+                        <div class="document-info">
+
+                            <h3 class="document-title">
+                                Australian Initial Outreach Letters
+                            </h3>
+
+                            <p class="document-description">
+                                Initial outreach letter template for authorised use.
+                            </p>
+
+                            <div class="document-meta">
+                                Word document
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-actions">
+
+                        <a
+                            class="document-action primary"
+                            href="/secure/documents/Sovereignty_Logistics_Australian_Initial_Outreach_Letters_v1.0.docx"
+                            target="_blank"
+                            rel="noopener"
+                            aria-label="View Australian Initial Outreach Letters"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            class="document-action secondary"
+                            href="/secure/documents/Sovereignty_Logistics_Australian_Initial_Outreach_Letters_v1.0.docx"
+                            download
+                            aria-label="Download Australian Initial Outreach Letters"
+                        >
+                            Download
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- Authorised Downloads -->
+
+        <section class="category" aria-labelledby="downloads-title">
+
+            <div class="category-header">
+                <h2 class="category-title" id="downloads-title">
+                    Authorised Downloads
+                </h2>
+
+                <span class="category-count">
+                    1 download
+                </span>
+            </div>
+
+            <div class="documents-grid">
+
+                <article class="document-card">
+
+                    <div class="document-top">
+
+                        <div class="file-icon zip" aria-hidden="true">
+                            ZIP
+                        </div>
+
+                        <div class="document-info">
+
+                            <h3 class="document-title">
+                                Sovereignty Logistics Launch &amp; Outreach Pack
+                            </h3>
+
+                            <p class="document-description">
+                                Authorised document package containing supporting materials.
+                            </p>
+
+                            <div class="document-meta">
+                                ZIP archive
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-actions">
+
+                        <a
+                            class="document-action primary"
+                            href="/secure/documents/Sovereignty_Logistics_Launch_and_Outreach_Pack_v1.0.zip"
+                            download
+                            aria-label="Download Sovereignty Logistics Launch and Outreach Pack"
+                        >
+                            Download ZIP
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="portal-footer">
+
+        <div class="footer-line">
+            <span>
+                Sovereignty Logistics Secure Document Portal
+            </span>
+            <span aria-hidden="true"> · </span>
+            <span>
+                Authorised users only
+            </span>
+        </div>
+
+    </footer>
+
+
+    <!-- Netlify Identity -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Secure portal authentication / logout -->
     <script src="/js/auth.js"></script>
 
 </body>
-
 </html>

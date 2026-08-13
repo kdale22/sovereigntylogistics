@@ -3,17 +3,619 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Secure Document Portal login for authorised Sovereignty Logistics users."
+    >
+
     <title>Secure Login | Sovereignty Logistics</title>
+
+    <style>
+        :root {
+            --navy: #0b1728;
+            --navy-light: #12243a;
+            --blue: #2f6fed;
+            --blue-dark: #245bc4;
+            --white: #ffffff;
+            --bg: #f4f7fb;
+            --border: #e1e7ef;
+            --text: #172033;
+            --muted: #667085;
+            --shadow: 0 18px 55px rgba(15, 31, 53, 0.12);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(47, 111, 237, 0.10),
+                    transparent 42%
+                ),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a,
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid rgba(47, 111, 237, 0.3);
+            outline-offset: 3px;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 16px;
+            z-index: 9999;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: var(--white);
+            color: var(--navy);
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+        }
+
+        .skip-link:focus {
+            top: 16px;
+        }
+
+        /* Header */
+
+        .site-header {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .header-inner {
+            width: min(1180px, calc(100% - 40px));
+            min-height: 76px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 42px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            font-size: 17px;
+            font-weight: 850;
+            letter-spacing: -0.04em;
+        }
+
+        .brand-name {
+            display: block;
+            font-size: 16px;
+            font-weight: 750;
+            line-height: 1.25;
+        }
+
+        .brand-label {
+            display: block;
+            margin-top: 2px;
+            color: rgba(255, 255, 255, 0.58);
+            font-size: 12px;
+        }
+
+        /* Main */
+
+        main {
+            width: min(100% - 32px, 1180px);
+            min-height: calc(100vh - 76px - 70px);
+            margin: 0 auto;
+            padding: 58px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-layout {
+            width: 100%;
+            max-width: 980px;
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(390px, 1fr);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        /* Information panel */
+
+        .login-intro {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 54px;
+            overflow: hidden;
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .login-intro::before {
+            content: "";
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            right: -170px;
+            top: -170px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .login-intro::after {
+            content: "";
+            position: absolute;
+            width: 440px;
+            height: 440px;
+            left: -260px;
+            bottom: -280px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .intro-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .intro-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 22px;
+            color: #a9c4ff;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .intro-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #5e91ff;
+        }
+
+        .login-intro h1 {
+            max-width: 430px;
+            margin: 0;
+            font-size: clamp(32px, 4vw, 45px);
+            line-height: 1.08;
+            letter-spacing: -0.045em;
+        }
+
+        .intro-text {
+            max-width: 440px;
+            margin: 18px 0 0;
+            color: rgba(255, 255, 255, 0.67);
+            font-size: 15px;
+        }
+
+        .security-list {
+            display: grid;
+            gap: 13px;
+            margin: 34px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .security-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 13px;
+        }
+
+        .check {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+            display: grid;
+            place-items: center;
+            margin-top: 1px;
+            border: 1px solid rgba(169, 196, 255, 0.25);
+            border-radius: 50%;
+            background: rgba(94, 145, 255, 0.12);
+            color: #a9c4ff;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        /* Login panel */
+
+        .login-panel {
+            padding: 54px;
+            background: var(--white);
+        }
+
+        .panel-eyebrow {
+            margin: 0 0 8px;
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .login-panel h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 28px;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+        }
+
+        .panel-description {
+            margin: 10px 0 28px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /*
+         * Netlify Identity widget
+         *
+         * The widget will render the login / password recovery UI here.
+         */
+        #netlify-identity-widget {
+            min-height: 180px;
+        }
+
+        .login-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 26px;
+            padding: 13px 14px;
+            border: 1px solid #e7ebf1;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .note-icon {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #eaf1ff;
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 25px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 650;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--blue);
+        }
+
+        /* Footer */
+
+        .site-footer {
+            width: min(100% - 32px, 1180px);
+            margin: 0 auto;
+            padding: 0 0 28px;
+            color: #8993a2;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 820px) {
+
+            .login-layout {
+                grid-template-columns: 1fr;
+                max-width: 570px;
+            }
+
+            .login-intro {
+                padding: 38px;
+            }
+
+            .security-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .login-panel {
+                padding: 38px;
+            }
+        }
+
+        @media (max-width: 560px) {
+
+            .header-inner {
+                width: calc(100% - 28px);
+                min-height: 68px;
+            }
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+                flex-basis: 38px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-label {
+                font-size: 11px;
+            }
+
+            main {
+                width: calc(100% - 24px);
+                padding: 24px 0 35px;
+                min-height: auto;
+            }
+
+            .login-layout {
+                border-radius: 16px;
+            }
+
+            .login-intro,
+            .login-panel {
+                padding: 28px 22px;
+            }
+
+            .login-intro h1 {
+                font-size: 32px;
+            }
+
+            .security-list {
+                grid-template-columns: 1fr;
+                margin-top: 25px;
+            }
+
+            .login-panel h2 {
+                font-size: 25px;
+            }
+
+            .site-footer {
+                width: calc(100% - 24px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Sovereignty Logistics</h1>
-    <h2>Secure Document Portal</h2>
+    <a class="skip-link" href="#main-content">
+        Skip to main content
+    </a>
 
-    <div data-netlify-identity-button></div>
+    <header class="site-header">
 
+        <div class="header-inner">
+
+            <a
+                class="brand"
+                href="/"
+                aria-label="Sovereignty Logistics home"
+            >
+                <span class="brand-mark" aria-hidden="true">
+                    SL
+                </span>
+
+                <span>
+                    <span class="brand-name">
+                        Sovereignty Logistics
+                    </span>
+
+                    <span class="brand-label">
+                        Secure Document Portal
+                    </span>
+                </span>
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main id="main-content">
+
+        <div class="login-layout">
+
+            <!-- Left information panel -->
+
+            <section
+                class="login-intro"
+                aria-labelledby="login-intro-title"
+            >
+
+                <div class="intro-content">
+
+                    <div class="intro-eyebrow">
+                        <span class="intro-dot" aria-hidden="true"></span>
+                        Authorised Access
+                    </div>
+
+                    <h1 id="login-intro-title">
+                        Secure access to your documents.
+                    </h1>
+
+                    <p class="intro-text">
+                        Sign in to the Sovereignty Logistics Secure Document
+                        Portal to access authorised operational resources,
+                        procedures, forms and supporting documents.
+                    </p>
+
+
+                    <ul class="security-list" aria-label="Portal security features">
+
+                        <li class="security-item">
+                            <span class="check" aria-hidden="true">✓</span>
+                            <span>Individual authorised user access</span>
+                        </li>
+
+                        <li class="security-item">
+                            <span class="check" aria-hidden="true">✓</span>
+                            <span>Protected document and download access</span>
+                        </li>
+
+                        <li class="security-item">
+                            <span class="check" aria-hidden="true">✓</span>
+                            <span>Secure authenticated sessions</span>
+                        </li>
+
+                        <li class="security-item">
+                            <span class="check" aria-hidden="true">✓</span>
+                            <span>Authorised users only</span>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </section>
+
+
+            <!-- Login panel -->
+
+            <section
+                class="login-panel"
+                aria-labelledby="login-title"
+            >
+
+                <p class="panel-eyebrow">
+                    Secure Portal
+                </p>
+
+                <h2 id="login-title">
+                    Sign in
+                </h2>
+
+                <p class="panel-description">
+                    Use your authorised email address and password to continue.
+                </p>
+
+
+                <!--
+                    Netlify Identity login UI
+                    Keep this element because the Identity widget uses it.
+                -->
+
+                <div
+                    id="netlify-identity-widget"
+                    data-netlify-identity-button
+                    aria-label="Secure portal login"
+                >
+                </div>
+
+
+                <div class="login-note">
+
+                    <span
+                        class="note-icon"
+                        aria-hidden="true"
+                    >
+                        i
+                    </span>
+
+                    <span>
+                        Access to this portal is restricted to authorised
+                        Sovereignty Logistics users. If you do not have an
+                        account, please contact your administrator.
+                    </span>
+
+                </div>
+
+
+                <a
+                    class="back-link"
+                    href="/"
+                >
+                    <span aria-hidden="true">←</span>
+                    Return to main website
+                </a>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <footer class="site-footer">
+        Sovereignty Logistics Secure Document Portal · Authorised users only
+    </footer>
+
+
+    <!-- Netlify Identity -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Login / authentication handling -->
     <script src="/login/js/login.js"></script>
 
 </body>
