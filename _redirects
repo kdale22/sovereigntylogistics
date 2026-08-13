@@ -1,2 +1,5 @@
 https://sovereigntylogistics.com/* https://www.sovereigntylogistics.com/:splat 301!
 /portal-demo.html /authorised-access.html 301
+
+/secure/*  /secure/:splat  200!  Role=admin,authorized
+/secure/*  /login           401!
